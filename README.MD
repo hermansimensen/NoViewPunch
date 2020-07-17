@@ -8,7 +8,7 @@ Removes the viewpunch from landing in CS:GO. (Feels more like CSS or Momentum Mo
 
 ## Showcase
 Without plugin (left) - With plugin (right). You can notice the viewpunch, especially when looking at walls. This is completely dealt with in this plugin.
-![Imgur Image](http://i.imgur.com/Cx2JmzL.gif)
+<img src="viewpunch.gif?raw=true" width="400px">
 
 ## What it does
 
