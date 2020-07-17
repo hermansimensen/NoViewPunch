@@ -1,0 +1,31 @@
+"Games"
+{
+	"#default"
+	{
+		"Keys"
+		{
+			"IGameMovement"		"GameMovement001"
+
+			"IServerGameEnts"	"ServerGameEnts001"
+		}
+
+		"Signatures"
+		{
+			"CreateInterface"
+			{
+				"library"		"server"
+				"windows"		"@CreateInterface"
+				"linux"			"@CreateInterface"
+			}
+		}
+
+		"Offsets"
+		{
+			"PlayerRoughLandingEffects"
+			{
+				"windows"	"55"
+				"linux"	"56"
+			}
+		}
+	}
+}
