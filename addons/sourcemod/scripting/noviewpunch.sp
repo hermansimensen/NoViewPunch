@@ -15,6 +15,8 @@
 
 #pragma semicolon 1
 
+ConVar gCV_UseCustomModels;
+
 public Plugin myinfo =
 {
 	name = PLUGIN_NAME,
@@ -37,6 +39,26 @@ public void OnPluginStart()
 	viewRecoil.FloatValue =  0.0;
 	ConVar recoilSpread = FindConVar("weapon_recoil_view_punch_extra");
 	recoilSpread.FloatValue = 0.0;
+	
+	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
+	
+	HookEvent("player_spawn", Hook_Spawn);
+}
+
+public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
+{
+	if(gCV_UseCustomModels.BoolValue)
+	{
+		int client = GetClientOfUserId(GetEventInt(event, "userid"));
+		if (GetClientTeam(client) == CS_TEAM_T)
+		{
+			SetEntityModel(client, "models/player/tm_leet_varianta.mdl");
+		}
+		else if (GetClientTeam(client) == CS_TEAM_CT)
+		{
+			SetEntityModel(client, "models/player/tm_leet_varianta.mdl");
+		}
+	}
 }
 
 void LoadDHooks()
@@ -99,6 +121,15 @@ void LoadDHooks()
 public MRESReturn DHooks_PlayerRoughLandingEffects(Handle hParams)
 {
 	return MRES_Supercede;
+}
+
+//these are just some models that I know don't have animations because of use in previous plugins. You can change them or disable them completly by commenting out the "HookEvent" line in OnPluginStart.
+public void OnMapStart()
+{
+	PrecacheModel("models/player/tm_leet_varianta.mdl", true);
+	AddFileToDownloadsTable("models/player/tm_leet_varianta.mdl");
+	PrecacheModel("models/player/ctm_idf_variantc.mdl", true);
+	AddFileToDownloadsTable("models/player/tm_leet_varianta.mdl");
 }
 
 // https://github.com/perilouswithadollarsign/cstrike15_src/blob/29e4c1fda9698d5cebcdaf1a0de4b829fa149bf8/game/shared/gamemovement.cpp#L4397
