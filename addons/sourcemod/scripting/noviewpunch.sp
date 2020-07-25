@@ -35,6 +35,8 @@ public void OnPluginStart()
 	viewPunch.FloatValue = 0.0;
 	ConVar viewRecoil = FindConVar("view_recoil_tracking");
 	viewRecoil.FloatValue =  0.0;
+	ConVar recoilSpread = FindConVar("weapon_recoil_view_punch_extra");
+	recoilSpread.FloatValue = 0.0;
 	
 	HookEvent("player_spawn", Hook_Spawn);
 }
@@ -130,8 +132,3 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 	float punch[3] = {0.75, 0.0, 0.0};
 	SetEntPropVector(client, Prop_Send, "m_viewPunchAngle", punch);	
 }
-
-
-
-
-
