@@ -13,7 +13,7 @@ Without plugin (left) - With plugin (right). You can notice the viewpunch, espec
 ## What it does
 
 * Suppresses the viewpunch from landing
-* Changes players models to a model without landing animations. (Can easily be removed or changed, the viewpunch will still be suppressed in most cases)
+* Disables the viewpunch from shooting
 * Cancels PlayerRoughLandingEffects, which stops some viewpunches from long falls. Note that CS:GO also does viewpunching on the client side, so sometimes, it will still punch the view for a fraction of a second, before it returns to normal.
 
 ## Contributing
