@@ -32,7 +32,13 @@ public void OnPluginStart()
 	SetFailState("This plugin is only for CS:GO!");
 	
 	LoadDHooks();
+	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
 	
+	HookEvent("player_spawn", Hook_Spawn);
+}
+
+public void OnConfigsExecuted()
+{
 	ConVar viewPunch = FindConVar("view_punch_decay");
 	viewPunch.FloatValue = 0.0;
 	ConVar viewRecoil = FindConVar("view_recoil_tracking");
@@ -41,8 +47,6 @@ public void OnPluginStart()
 	recoilSpread.FloatValue = 0.0;
 	
 	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
-	
-	HookEvent("player_spawn", Hook_Spawn);
 }
 
 public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
