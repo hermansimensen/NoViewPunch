@@ -16,6 +16,8 @@
 #pragma semicolon 1
 
 ConVar gCV_UseCustomModels;
+ConVar gCV_forcePredict;
+bool g_bToggled[MAXPLAYERS + 1];
 
 public Plugin myinfo =
 {
@@ -35,6 +37,7 @@ public void OnPluginStart()
 	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
 	
 	HookEvent("player_spawn", Hook_Spawn);
+	RegConsoleCmd("sm_toggleprediction", Command_TogglePrediction, "Lets a user toggle client side prediction. Only use with low ping..", 0);
 }
 
 public void OnConfigsExecuted()
@@ -46,7 +49,7 @@ public void OnConfigsExecuted()
 	ConVar recoilSpread = FindConVar("weapon_recoil_view_punch_extra");
 	recoilSpread.FloatValue = 0.0;
 	
-	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
+	gCV_forcePredict = FindConVar("sv_client_predict");
 }
 
 public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
@@ -63,6 +66,23 @@ public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
 			SetEntityModel(client, "models/player/tm_leet_varianta.mdl");
 		}
 	}
+}
+
+public Action Command_TogglePrediction(int client, int args)
+{
+	if(g_bToggled[client])
+	{
+		g_bToggled[client] = false;
+		PrintToChat(client, "You have now enabled client-side prediction.");
+		gCV_forcePredict.ReplicateToClient(client, "1.0");
+	} 
+	else
+	{
+		g_bToggled[client] = true;
+		PrintToChat(client, "You have now disabled client-side prediction.");
+		gCV_forcePredict.ReplicateToClient(client, "0.0");
+	}
+	return Plugin_Continue;
 }
 
 void LoadDHooks()
