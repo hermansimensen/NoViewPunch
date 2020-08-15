@@ -4,7 +4,7 @@
 #define PLUGIN_NAME           "NoViewPunch"
 #define PLUGIN_AUTHOR         "carnifex"
 #define PLUGIN_DESCRIPTION    "Removes viewpunch for bhop"
-#define PLUGIN_VERSION        "1.0"
+#define PLUGIN_VERSION        "1.1"
 #define PLUGIN_URL            ""
 
 #include <sourcemod>
@@ -54,18 +54,23 @@ public void OnConfigsExecuted()
 
 public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
 {
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if(gCV_UseCustomModels.BoolValue)
 	{
-		int client = GetClientOfUserId(GetEventInt(event, "userid"));
 		if (GetClientTeam(client) == CS_TEAM_T)
 		{
 			SetEntityModel(client, "models/player/tm_leet_varianta.mdl");
 		}
 		else if (GetClientTeam(client) == CS_TEAM_CT)
 		{
-			SetEntityModel(client, "models/player/tm_leet_varianta.mdl");
+			SetEntityModel(client, "models/player/ctm_idf_variantc.mdl");
 		}
-	}
+	}	
+}
+
+public void OnClientPutInServer(int client)
+{
+	g_bToggled[client] = false;
 }
 
 public Action Command_TogglePrediction(int client, int args)
@@ -153,7 +158,7 @@ public void OnMapStart()
 	PrecacheModel("models/player/tm_leet_varianta.mdl", true);
 	AddFileToDownloadsTable("models/player/tm_leet_varianta.mdl");
 	PrecacheModel("models/player/ctm_idf_variantc.mdl", true);
-	AddFileToDownloadsTable("models/player/tm_leet_varianta.mdl");
+	AddFileToDownloadsTable("models/player/ctm_idf_variantc.mdl");
 }
 
 // https://github.com/perilouswithadollarsign/cstrike15_src/blob/29e4c1fda9698d5cebcdaf1a0de4b829fa149bf8/game/shared/gamemovement.cpp#L4397

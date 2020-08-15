@@ -14,7 +14,7 @@ Without plugin (left) - With plugin (right). You can notice the viewpunch, espec
 
 * Suppresses the viewpunch from landing
 * Disables the viewpunch from shooting
-* Optionally sets custom models to remove landing animations
+* Optionally sets custom models to remove landing animations (disabled by setting the convar nvp_custommodels to 0)
 * Lets players toggle client-side prediction in-game resulting in perfect camera movement (!toggleprediction). This will only work well on players with low ping, as it relies on a good connection to the server.
 * Cancels PlayerRoughLandingEffects, which stops some viewpunches from long falls. Note that CS:GO also does viewpunching on the client side, so sometimes, it will still punch the view for a fraction of a second, before it returns to normal.
 
