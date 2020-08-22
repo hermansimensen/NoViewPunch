@@ -43,11 +43,14 @@ public void OnPluginStart()
 public void OnConfigsExecuted()
 {
 	ConVar viewPunch = FindConVar("view_punch_decay");
+	viewPunch.Flags &= ~FCVAR_CHEAT;
 	viewPunch.FloatValue = 0.0;
 	ConVar viewRecoil = FindConVar("view_recoil_tracking");
 	viewRecoil.FloatValue =  0.0;
+	viewRecoil.Flags &= ~FCVAR_CHEAT;
 	ConVar recoilSpread = FindConVar("weapon_recoil_view_punch_extra");
 	recoilSpread.FloatValue = 0.0;
+	recoilSpread.Flags &= ~FCVAR_CHEAT;
 	
 	gCV_forcePredict = FindConVar("sv_client_predict");
 }
