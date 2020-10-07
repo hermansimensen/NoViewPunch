@@ -11,7 +11,6 @@
 #include <sdktools>
 #include <sdkhooks>
 #include <cstrike>
-#include <dhooks>
 
 #pragma semicolon 1
 
@@ -33,8 +32,7 @@ public void OnPluginStart()
 	if(GetEngineVersion() != Engine_CSGO)
 	SetFailState("This plugin is only for CS:GO!");
 	
-	LoadDHooks();
-	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", 0, true, 0.0, true, 1.0);
+	gCV_UseCustomModels = CreateConVar("nvp_custommodels", "1", "Use custom models to remove landing animation?", _, true, 0.0, true, 1.0);
 	
 	HookEvent("player_spawn", Hook_Spawn);
 	RegConsoleCmd("sm_toggleprediction", Command_TogglePrediction, "Lets a user toggle client side prediction. Only use with low ping..", 0);
@@ -91,68 +89,6 @@ public Action Command_TogglePrediction(int client, int args)
 		gCV_forcePredict.ReplicateToClient(client, "0.0");
 	}
 	return Plugin_Continue;
-}
-
-void LoadDHooks()
-{
-	Handle gamedataConf = LoadGameConfigFile("noviewpunch.games");
-	
-	if(gamedataConf == null)
-	{
-		SetFailState("Failed to load NoViewPunch gamedata");
-	}
-	
-	StartPrepSDKCall(SDKCall_Static);
-	if(!PrepSDKCall_SetFromConf(gamedataConf, SDKConf_Signature, "CreateInterface"))
-	{
-		SetFailState("Failed to get CreateInterface");
-	}
-	PrepSDKCall_AddParameter(SDKType_String, SDKPass_Pointer);
-	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Pointer, VDECODE_FLAG_ALLOWNULL);
-	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	Handle CreateInterface = EndPrepSDKCall();
-	
-	if(CreateInterface == null)
-	{
-		SetFailState("Unable to prepare SDKCall for CreateInterface");
-	}
-	
-	char interfaceName[64];
-	if(!GameConfGetKeyValue(gamedataConf, "IGameMovement", interfaceName, sizeof(interfaceName)))
-	{
-		SetFailState("Failed to get IGameMovement interface name");
-	}
-	
-	Address IGameMovement = SDKCall(CreateInterface, interfaceName, 0);
-	if(!IGameMovement)
-	{
-		SetFailState("Failed to get IGameMovement pointer");
-	}
-	
-	int iOffset = GameConfGetOffset(gamedataConf, "PlayerRoughLandingEffects");
-	if(iOffset == -1)
-	{
-		LogError("Can't find CGameMovement::PlayerRoughLandingEffects offset in gamedata.");
-		return;
-	}
-	
-	Handle g_PlayerRoughLandingEffectsHook = DHookCreate(iOffset, HookType_Raw, ReturnType_Void, ThisPointer_Ignore, DHooks_PlayerRoughLandingEffects);
-	if(g_PlayerRoughLandingEffectsHook == null)
-	{
-		LogError("Failed to create CGameMovement::PlayerRoughLandingEffects hook.");
-		return;
-	}
-	
-	DHookAddParam(g_PlayerRoughLandingEffectsHook, HookParamType_Float);
-	DHookRaw(g_PlayerRoughLandingEffectsHook, false, IGameMovement);
-	
-	delete CreateInterface;
-	delete gamedataConf;
-}
-
-public MRESReturn DHooks_PlayerRoughLandingEffects(Handle hParams)
-{
-	return MRES_Supercede;
 }
 
 //these are just some models that I know don't have animations because of use in previous plugins. You can change them or disable them completly by commenting out the "HookEvent" line in OnPluginStart.
