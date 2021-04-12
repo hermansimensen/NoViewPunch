@@ -67,6 +67,14 @@ public void Hook_Spawn(Event event, const char[] name, bool dontBroadcast)
 			SetEntityModel(client, "models/player/ctm_idf_variantc.mdl");
 		}
 	}	
+
+	SDKHook(client, SDKHook_OnTakeDamagePost, Hook_OnTakeDamagePost);
+}
+
+void Hook_OnTakeDamagePost(int victim, int attacker, int inflictor, float damage, int damagetype)
+{
+	float punch[3] = {0.75, 0.0, 0.0};
+	SetEntPropVector(victim, Prop_Send, "m_viewPunchAngle", punch);
 }
 
 public void OnClientPutInServer(int client)
