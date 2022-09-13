@@ -36,6 +36,7 @@ public void OnPluginStart()
 	
 	HookEvent("player_spawn", Hook_Spawn);
 	RegConsoleCmd("sm_toggleprediction", Command_TogglePrediction, "Lets a user toggle client side prediction. Only use with low ping..", 0);
+	AutoExecConfig();
 }
 
 public void OnConfigsExecuted()
@@ -114,4 +115,5 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 {
 	float punch[3] = {0.75, 0.0, 0.0};
 	SetEntPropVector(client, Prop_Send, "m_viewPunchAngle", punch);	
+	return Plugin_Continue;
 }
